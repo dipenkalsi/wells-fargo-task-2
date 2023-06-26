@@ -8,17 +8,19 @@ import jakarta.persistence.Id;
 import java.util.ArrayList;
 
 @Entity
-@Table(name="advisors")
-public class Advisor {
+@Table(name="clients")
+public class Client {
 
     @Id
     @GeneratedValue()
-    @column(name="id")
-    private long advisorId;
+    private long clientId;
 
-    @OneToMany(mappedBy="advisors")
-    private ArrayList<Client> clients = new ArrayList<Client>();
+    @ManyToOne
+    @JoinColumn(name="advisors_id", nullable=false)
+    private Advisor advisor;
 
+    @OneToMany(mappedBy="clients")
+    private ArrayList<Portfolio> portfolios = new ArrayList<Portfolio>();
 
     @Column(nullable = false)
     private String firstName;
@@ -35,21 +37,21 @@ public class Advisor {
     @Column(nullable = false)
     private String email;
 
-    protected Advisor() {
+    protected Client() {
 
     }
 
-    public Advisor(String firstName, String lastName, String address, String phone, String email, ArrayList<Client> cl) {
+    public Client(String firstName, String lastName, String address, String phone, String email, ArrayList<Portfolio> pf) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.address = address;
         this.phone = phone;
         this.email = email;
-        this.clients = cl;
+        this.portfolios = pf;
     }
 
-    public Long getAdvisorId() {
-        return advisorId;
+    public Long getClientId() {
+        return clientId;
     }
 
     public String getFirstName() {
@@ -92,11 +94,9 @@ public class Advisor {
         this.email = email;
     }
 
-    public ArrayList<Client> getClients() {
-        return clients;
-    }
+    public void setPortfolios(ArrayList<Portfolio> pf){ this.portfolios = pf; }
 
-    public void setClients(ArrayList<Client> clients) {
-        this.clients = clients;
+    public ArrayList<Portfolio> getPortfolios() {
+        return portfolios;
     }
 }
